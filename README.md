@@ -32,6 +32,12 @@ Zone validates that max_drones is greater than 0.
 
 A Connection represents a bidirectional route between two zones.
 
+Connection stores references to Zone objects, not zone names.
+The parser resolves zone names before creating Connection objects.
+Connection is immutable after parsing.
+Connection validates that max_link_capacity is greater than 0.
+Connection validates that both zones are different.
+
 ### Map
 
 Map represents the world and the relationships between zones.
