@@ -18,7 +18,6 @@ class Zone:
     color: str | None = None
     max_drones: int = 1
 
-
     def __post_init__(self):
         if self.max_drones <= 0:
             raise ValueError(
