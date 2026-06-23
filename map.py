@@ -15,17 +15,17 @@ class Map:
     def __post_init__(self):
         if self.start_zone == self.end_zone:
             raise ValueError(
-                "start zone cannot be the same as end zone"
+                "start_zone cannot be the same as end_zone"
             )
 
         if self.start_zone.name not in self.zones:
             raise ValueError(
-                "start zone is unknown"
+                "start_zone is unknown"
             )
 
         if self.end_zone.name not in self.zones:
             raise ValueError(
-                "end zone is unknown"
+                "end_zone is unknown"
             )
 
         self.adjacency = {}
@@ -49,3 +49,10 @@ class Map:
 
             self.adjacency[zone_a_name].append(connection)
             self.adjacency[zone_b_name].append(connection)
+
+    def get_connections(self, zone: Zone):
+        if zone.name not in self.zones:
+            raise ValueError(
+                f"zone is not in map: {zone.name}"
+            )
+        return self.adjacency[zone.name]
