@@ -56,3 +56,14 @@ def parse_hub_kind(line_number: int, line: str) -> str:
     raise ValueError(
         f"line {line_number}: invalid hub line"
     )
+
+
+def parse_hub_body(line_number: int, line: str) -> str:
+    parts = line.split(":", 1)
+    body = parts[1]
+    body = body.strip()
+    if not body:
+        raise ValueError(
+            f"line {line_number}: hub line is missing body"
+        )
+    return body
