@@ -67,3 +67,19 @@ def parse_hub_body(line_number: int, line: str) -> str:
             f"line {line_number}: hub line is missing body"
         )
     return body
+
+
+def parse_hub_fields(line_number: int, body: str) -> tuple[str, str, str, str]:
+    parts = body.split(maxsplit=3)
+    if len(parts) < 3:
+        raise ValueError(
+            f"line {line_number}: hub line must contain name, x and y"
+        )
+    name = parts[0]
+    x_text = parts[1]
+    y_text = parts[2]
+    if len(parts) == 4:
+        metadata = parts[3]
+    else:
+        metadata = ""
+    return name, x_text, y_text, metadata
