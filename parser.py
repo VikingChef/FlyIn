@@ -35,3 +35,12 @@ def parse_nb_drones(line_number: int, line: str) -> int:
             f"line {line_number}: nb_drones must be a positive integer"
         )
     return nb_drones
+
+
+def parse_drone_count(cleaned_lines: list[tuple[int, str]]) -> int:
+    if not cleaned_lines:
+        raise ValueError(
+            "map file is empty"
+        )
+    line_number, line = cleaned_lines[0]
+    return parse_nb_drones(line_number, line)
