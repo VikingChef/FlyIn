@@ -44,3 +44,15 @@ def parse_drone_count(cleaned_lines: list[tuple[int, str]]) -> int:
         )
     line_number, line = cleaned_lines[0]
     return parse_nb_drones(line_number, line)
+
+
+def parse_hub_kind(line_number: int, line: str) -> str:
+    if line.startswith("start_hub:"):
+        return "start"
+    if line.startswith("end_hub:"):
+        return "end"
+    if line.startswith("hub:"):
+        return "normal"
+    raise ValueError(
+        f"line {line_number}: invalid hub line"
+    )
