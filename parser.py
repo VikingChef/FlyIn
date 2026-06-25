@@ -109,3 +109,19 @@ def parse_hub_line(
     name, x_text, y_text, metadata = parse_hub_fields(line_number, body)
     x, y = parse_hub_coordinates(line_number, x_text, y_text)
     return kind, name, x, y, metadata
+
+
+def parse_metadata_body(line_number: int, metadata: str) -> str:
+    if not metadata:
+        return ""
+    if not metadata.startswith("[") or not metadata.endswith("]"):
+        raise ValueError(
+            f"line {line_number}: metadata must be wrapped in []"
+        )
+    body = metadata[1:-1]
+    body = body.strip()
+    if not body:
+        raise ValueError(
+            f"line {line_number}: metadata body is empty"
+        )
+    return body
