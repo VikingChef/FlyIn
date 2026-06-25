@@ -83,3 +83,18 @@ def parse_hub_fields(line_number: int, body: str) -> tuple[str, str, str, str]:
     else:
         metadata = ""
     return name, x_text, y_text, metadata
+
+
+def parse_hub_coordinates(
+    line_number: int,
+    x_text: str,
+    y_text: str
+) -> tuple[int, int]:
+    try:
+        x = int(x_text)
+        y = int(y_text)
+    except ValueError:
+        raise ValueError(
+            f"line {line_number}: hub x and y coordinates must be integers"
+        ) from None
+    return x, y
