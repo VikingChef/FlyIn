@@ -180,3 +180,43 @@ def is_hub_line(line: str) -> bool:
     if line.startswith("hub:"):
         return True
     return False
+
+
+def parse_hubs(
+    cleaned_lines: list[tuple[int, str]]
+) -> tuple[dict[str, Zone], Zone, Zone]:
+    zones: dict[str, Zone] = {}
+    start_zone: Zone | None = None
+    end_zone: Zone | None = None
+    for line_number, line in cleaned_lines:
+        if is_hub_line(line):
+            kind, zone = parse_zone_from_hub_line(line_number, line)
+            if zone.name in zones:
+                raise ValueError(
+                    f"line {line_number}: duplicate zone name: {zone.name}"
+                )
+            zones[zone.name] = zone
+            if kind == "start":
+                if start_zone is not None:
+                    raise ValueError(
+                        f"line {line_number}: multiple start hubs"
+                    )
+                start_zone = zone
+
+            if kind == "end":
+                if end_zone is not None:
+                    raise ValueError(
+                        f"line {line_number}: multiple end hubs"
+                    )
+                end_zone = zone
+    if start_zone is None:
+        raise ValueError(
+            "map is missing start_hub"
+        )
+
+    if end_zone is None:
+        raise ValueError(
+            "map is missing end_hub"
+        )
+
+    return zones, start_zone, end_zone
