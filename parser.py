@@ -1,3 +1,6 @@
+from zone import Zone
+
+
 def clean_line(line: str) -> str:
     cleaned = line.split("#")[0]
     cleaned = cleaned.strip()
@@ -157,3 +160,13 @@ def parse_hub_color(line_number: int, metadata: str) -> str | None:
             f"line {line_number}: unsupported hub metadata key: {key}"
         )
     return value
+
+
+def parse_zone_from_hub_line(
+    line_number: int,
+    line: str
+) -> tuple[str, Zone]:
+    kind, name, x, y, metadata = parse_hub_line(line_number, line)
+    color = parse_hub_color(line_number, metadata)
+    zone = Zone(name, x, y, color=color)
+    return kind, zone
