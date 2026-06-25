@@ -145,3 +145,15 @@ def parse_metadata_pair(
             f"line {line_number}: metadata key or value cannot be empty"
         )
     return key, value
+
+
+def parse_hub_color(line_number: int, metadata: str) -> str | None:
+    metadata_body = parse_metadata_body(line_number, metadata)
+    if not metadata_body:
+        return None
+    key, value = parse_metadata_pair(line_number, metadata_body)
+    if key != "color":
+        raise ValueError(
+            f"line {line_number}: unsupported hub metadata key: {key}"
+        )
+    return value
