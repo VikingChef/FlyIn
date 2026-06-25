@@ -125,3 +125,23 @@ def parse_metadata_body(line_number: int, metadata: str) -> str:
             f"line {line_number}: metadata body is empty"
         )
     return body
+
+
+def parse_metadata_pair(
+    line_number: int,
+    metadata_body: str
+) -> tuple[str, str]:
+    if "=" not in metadata_body:
+        raise ValueError(
+            f"line {line_number}: metadata must contain ="
+        )
+    parts = metadata_body.split("=", 1)
+    key = parts[0]
+    value = parts[1]
+    key = key.strip()
+    value = value.strip()
+    if not key or not value:
+        raise ValueError(
+            f"line {line_number}: metadata key or value cannot be empty"
+        )
+    return key, value
