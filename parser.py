@@ -170,3 +170,13 @@ def parse_zone_from_hub_line(
     color = parse_hub_color(line_number, metadata)
     zone = Zone(name, x, y, color=color)
     return kind, zone
+
+
+def is_hub_line(line: str) -> bool:
+    if line.startswith("start_hub:"):
+        return True
+    if line.startswith("end_hub:"):
+        return True
+    if line.startswith("hub:"):
+        return True
+    return False
