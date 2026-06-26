@@ -378,12 +378,23 @@ def validate_connection_order(
                 )
 
 
+def validate_drone_count_position(
+    cleaned_lines: list[tuple[int, str]]
+) -> None:
+    for line_number, line in cleaned_lines[1:]:
+        if is_drone_count_line(line):
+            raise ValueError(
+                f"line {line_number}: duplicate nb_drones definition"
+            )
+
+
 def parse_map_file(
     file_path: str
 ) -> tuple[int, Map]:
     cleaned_lines = read_clean_lines(file_path)
     validate_known_lines(cleaned_lines)
     validate_connection_order(cleaned_lines)
+    validate_drone_count_position(cleaned_lines)
     nb_drones = parse_drone_count(cleaned_lines)
     zones, start_zone, end_zone = parse_hubs(cleaned_lines)
     connections = parse_connections(cleaned_lines, zones)
