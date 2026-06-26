@@ -290,3 +290,16 @@ def parse_connection_from_line(
     zone_a = zones[zone_a_name]
     zone_b = zones[zone_b_name]
     return Connection(zone_a, zone_b)
+
+
+def parse_connections(
+    cleaned_lines: list[tuple[int, str]],
+    zones: dict[str, Zone]
+) -> list[Connection]:
+    connections: list[Connection] = []
+
+    for line_number, line in cleaned_lines:
+        if is_connection_line(line):
+            connection = parse_connection_from_line(line_number, line, zones)
+            connections.append(connection)
+    return connections
