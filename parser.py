@@ -164,11 +164,22 @@ def parse_hub_color(line_number: int, metadata: str) -> str | None:
     return value
 
 
+def validate_zone_name(
+    line_number: int,
+    name: str
+) -> None:
+    if "-" in name:
+        raise ValueError(
+            f"line {line_number}: zone name cannot contain '-'"
+        )
+
+
 def parse_zone_from_hub_line(
     line_number: int,
     line: str
 ) -> tuple[str, Zone]:
     kind, name, x, y, metadata = parse_hub_line(line_number, line)
+    validate_zone_name(line_number, name)
     color = parse_hub_color(line_number, metadata)
     zone = Zone(name, x, y, color=color)
     return kind, zone
