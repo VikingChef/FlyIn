@@ -326,10 +326,33 @@ def parse_connections(
     return connections
 
 
+def is_drone_count_line(line: str) -> bool:
+    if line.startswith("nb_drones:"):
+        return True
+    return False
+
+
+def validate_known_lines(
+    cleaned_lines: list[tuple[int, str]]
+) -> None:
+    for line_number, line in cleaned_lines:
+        if (
+            is_drone_count_line(line)
+            or is_hub_line(line)
+            or is_connection_line(line)
+        ):
+            continue
+
+        raise ValueError(
+            f"line {line_number}: unknown line type"
+        )
+
+
 def parse_map_file(
     file_path: str
 ) -> tuple[int, Map]:
     cleaned_lines = read_clean_lines(file_path)
+    validate_known_lines(cleaned_lines)
     nb_drones = parse_drone_count(cleaned_lines)
     zones, start_zone, end_zone = parse_hubs(cleaned_lines)
     connections = parse_connections(cleaned_lines, zones)
