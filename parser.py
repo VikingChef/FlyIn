@@ -1,4 +1,4 @@
-from zone import Zone
+from zone import Zone, ZoneType
 from connection import Connection
 from map import Map
 
@@ -152,16 +152,46 @@ def parse_metadata_pair(
     return key, value
 
 
-def parse_hub_color(line_number: int, metadata: str) -> str | None:
+def parse_zone_type(
+    line_number: int,
+    value: str
+) -> ZoneType:
+    if value == "normal":
+        return ZoneType.NORMAL
+    if value == "blocked":
+        return ZoneType.BLOCKED
+    if value == "restricted":
+        return ZoneType.RESTRICTED
+    if value == "priority":
+        return ZoneType.PRIORITY
+    raise ValueError(
+       f"line {line_number}: unsupported zone type: {value}"
+    )
+
+
+def parse_hub_metadata(
+    line_number: int,
+    metadata: str
+) -> tuple[str | None, ZoneType]:
     metadata_body = parse_metadata_body(line_number, metadata)
+    color = None
+    zone_type = ZoneType.NORMAL
+
     if not metadata_body:
-        return None
+        return color, zone_type
+
     key, value = parse_metadata_pair(line_number, metadata_body)
-    if key != "color":
+
+    if key == "color":
+        color = value
+    elif key == "type":
+        zone_type = parse_zone_type(line_number, value)
+    else:
         raise ValueError(
             f"line {line_number}: unsupported hub metadata key: {key}"
         )
-    return value
+
+    return color, zone_type
 
 
 def validate_zone_name(
@@ -180,8 +210,8 @@ def parse_zone_from_hub_line(
 ) -> tuple[str, Zone]:
     kind, name, x, y, metadata = parse_hub_line(line_number, line)
     validate_zone_name(line_number, name)
-    color = parse_hub_color(line_number, metadata)
-    zone = Zone(name, x, y, color=color)
+    color, zone_type = parse_hub_metadata(line_number, metadata)
+    zone = Zone(name, x, y, zone_type=zone_type, color=color)
     return kind, zone
 
 
