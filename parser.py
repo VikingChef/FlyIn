@@ -220,3 +220,9 @@ def parse_hubs(
         )
 
     return zones, start_zone, end_zone
+
+
+def is_connection_line(line: str) -> bool:
+    if line.startswith("connection:"):
+        return True
+    return False
