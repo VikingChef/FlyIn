@@ -1,5 +1,6 @@
 from zone import Zone
 from connection import Connection
+from map import Map
 
 
 def clean_line(line: str) -> str:
@@ -323,3 +324,14 @@ def parse_connections(
             connections.append(connection)
 
     return connections
+
+
+def parse_map_file(
+    file_path: str
+) -> tuple[int, Map]:
+    cleaned_lines = read_clean_lines(file_path)
+    nb_drones = parse_drone_count(cleaned_lines)
+    zones, start_zone, end_zone = parse_hubs(cleaned_lines)
+    connections = parse_connections(cleaned_lines, zones)
+    parsed_map = Map(zones, connections, start_zone, end_zone)
+    return nb_drones, parsed_map
