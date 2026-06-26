@@ -226,3 +226,46 @@ def is_connection_line(line: str) -> bool:
     if line.startswith("connection:"):
         return True
     return False
+
+
+def parse_connection_body(
+    line_number: int,
+    line: str
+) -> str:
+    if not line.startswith("connection:"):
+        raise ValueError(
+            f"line {line_number}: expected connection definition"
+        )
+
+    parts = line.split(":", 1)
+    body = parts[1]
+    body = body.strip()
+
+    if not body:
+        raise ValueError(
+            f"line {line_number}: connection line is missing body"
+        )
+
+    return body
+
+
+def parse_connection_names(
+    line_number: int,
+    body: str
+) -> tuple[str, str]:
+    parts = body.split("-")
+
+    if len(parts) != 2:
+        raise ValueError(
+            f"line {line_number}: connection must use exactly one dash"
+        )
+
+    zone_a_name = parts[0].strip()
+    zone_b_name = parts[1].strip()
+
+    if not zone_a_name or not zone_b_name:
+        raise ValueError(
+            f"line {line_number}: connection zone names cannot be empty"
+        )
+
+    return zone_a_name, zone_b_name
