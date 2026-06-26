@@ -1,4 +1,5 @@
 from zone import Zone
+from connection import Connection
 
 
 def clean_line(line: str) -> str:
@@ -269,3 +270,23 @@ def parse_connection_names(
         )
 
     return zone_a_name, zone_b_name
+
+
+def parse_connection_from_line(
+    line_number: int,
+    line: str,
+    zones: dict[str, Zone]
+) -> Connection:
+    body = parse_connection_body(line_number, line)
+    zone_a_name, zone_b_name = parse_connection_names(line_number, body)
+    if zone_a_name not in zones:
+        raise ValueError(
+            f"line {line_number}: unknown zone in connection: {zone_a_name}"
+        )
+    if zone_b_name not in zones:
+        raise ValueError(
+            f"line {line_number}: unknown zone in connection: {zone_b_name}"
+        )
+    zone_a = zones[zone_a_name]
+    zone_b = zones[zone_b_name]
+    return Connection(zone_a, zone_b)
