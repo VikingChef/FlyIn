@@ -297,9 +297,29 @@ def parse_connections(
     zones: dict[str, Zone]
 ) -> list[Connection]:
     connections: list[Connection] = []
+    seen_connections: set[tuple[str, str]] = set()
 
     for line_number, line in cleaned_lines:
         if is_connection_line(line):
             connection = parse_connection_from_line(line_number, line, zones)
+
+            zone_a_name = connection.zone_a.name
+            zone_b_name = connection.zone_b.name
+            if zone_a_name < zone_b_name:
+                first_name = zone_a_name
+                second_name = zone_b_name
+            else:
+                first_name = zone_b_name
+                second_name = zone_a_name
+
+            connection_key = (first_name, second_name)
+
+            if connection_key in seen_connections:
+                raise ValueError(
+                    f"line {line_number}: duplicate connection"
+                )
+
+            seen_connections.add(connection_key)
             connections.append(connection)
+
     return connections
