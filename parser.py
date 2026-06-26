@@ -329,6 +329,10 @@ def parse_connection_from_line(
         raise ValueError(
             f"line {line_number}: unknown zone in connection: {zone_b_name}"
         )
+    if zone_a_name == zone_b_name:
+        raise ValueError(
+            f"line {line_number}: connection zones must be different"
+        )
     zone_a = zones[zone_a_name]
     zone_b = zones[zone_b_name]
     return Connection(zone_a, zone_b)
