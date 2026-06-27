@@ -1,7 +1,12 @@
 from zone import Zone, ZoneType
 from connection import Connection
 from map import Map
-from parser_lines import read_clean_lines
+from parser_lines import (
+    read_clean_lines,
+    is_hub_line,
+    is_drone_count_line,
+    is_connection_line
+)
 
 
 def parse_nb_drones(line_number: int, line: str) -> int:
@@ -197,16 +202,6 @@ def parse_zone_from_hub_line(
     return kind, zone
 
 
-def is_hub_line(line: str) -> bool:
-    if line.startswith("start_hub:"):
-        return True
-    if line.startswith("end_hub:"):
-        return True
-    if line.startswith("hub:"):
-        return True
-    return False
-
-
 def parse_hubs(
     cleaned_lines: list[tuple[int, str]]
 ) -> tuple[dict[str, Zone], Zone, Zone]:
@@ -245,12 +240,6 @@ def parse_hubs(
         )
 
     return zones, start_zone, end_zone
-
-
-def is_connection_line(line: str) -> bool:
-    if line.startswith("connection:"):
-        return True
-    return False
 
 
 def parse_connection_body(
@@ -351,12 +340,6 @@ def parse_connections(
             connections.append(connection)
 
     return connections
-
-
-def is_drone_count_line(line: str) -> bool:
-    if line.startswith("nb_drones:"):
-        return True
-    return False
 
 
 def validate_known_lines(
