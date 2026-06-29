@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 
 from drone import Drone
 from map import Map
+from connection import Connection
+from move import ProposedMove
 
 
 @dataclass
@@ -26,6 +28,21 @@ class Simulation:
                 self.map.end_zone
             )
             self.drones.append(drone)
+
+    def create_proposed_move(
+        self,
+        drone: Drone,
+        connection: Connection
+    ) -> ProposedMove:
+        from_zone = drone.current_zone
+        to_zone = connection.get_other_zone(from_zone)
+
+        return ProposedMove(
+            drone,
+            from_zone,
+            to_zone,
+            connection
+        )
 
     def all_drones_arrived(self) -> bool:
         for drone in self.drones:
