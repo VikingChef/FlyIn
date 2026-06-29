@@ -18,3 +18,14 @@ class Connection:
             raise ValueError(
                 "connection zones must be different"
             )
+
+    def get_other_zone(self, zone: Zone) -> Zone:
+        if zone == self.zone_a:
+            return self.zone_b
+
+        if zone == self.zone_b:
+            return self.zone_a
+
+        raise ValueError(
+            "zone is not part of connection"
+        )
