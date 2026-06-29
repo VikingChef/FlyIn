@@ -44,6 +44,9 @@ class Simulation:
             connection
         )
 
+    def apply_move(self, move: ProposedMove) -> None:
+        move.drone.current_zone = move.to_zone
+
     def all_drones_arrived(self) -> bool:
         for drone in self.drones:
             if not drone.has_arrived():
