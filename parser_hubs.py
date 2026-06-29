@@ -113,8 +113,15 @@ def parse_zone_from_hub_line(
 ) -> tuple[str, Zone]:
     kind, name, x, y, metadata = parse_hub_line(line_number, line)
     validate_zone_name(line_number, name)
-    color, zone_type = parse_hub_metadata(line_number, metadata)
-    zone = Zone(name, x, y, zone_type=zone_type, color=color)
+    color, zone_type, max_drones = parse_hub_metadata(line_number, metadata)
+    zone = Zone(
+        name,
+        x,
+        y,
+        zone_type=zone_type,
+        color=color,
+        max_drones=max_drones
+    )
     return kind, zone
 
 

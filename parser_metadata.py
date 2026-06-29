@@ -37,6 +37,19 @@ def parse_metadata_pair(
     return key, value
 
 
+def parse_metadata_pairs(
+    line_number: int,
+    metadata_body: str
+) -> list[tuple[str, str]]:
+    metadata_pairs = []
+
+    for metadata_part in metadata_body.split():
+        key, value = parse_metadata_pair(line_number, metadata_part)
+        metadata_pairs.append((key, value))
+
+    return metadata_pairs
+
+
 def parse_zone_type(
     line_number: int,
     value: str
@@ -57,23 +70,39 @@ def parse_zone_type(
 def parse_hub_metadata(
     line_number: int,
     metadata: str
-) -> tuple[str | None, ZoneType]:
+) -> tuple[str | None, ZoneType, int]:
     metadata_body = parse_metadata_body(line_number, metadata)
     color = None
     zone_type = ZoneType.NORMAL
+    max_drones = 1
 
     if not metadata_body:
-        return color, zone_type
+        return color, zone_type, max_drones
 
-    key, value = parse_metadata_pair(line_number, metadata_body)
+    metadata_pairs = parse_metadata_pairs(line_number, metadata_body)
 
-    if key == "color":
-        color = value
-    elif key == "type":
-        zone_type = parse_zone_type(line_number, value)
-    else:
-        raise ValueError(
-            f"line {line_number}: unsupported hub metadata key: {key}"
-        )
+    for key, value in metadata_pairs:
+        if key == "color":
+            color = value
+        elif key == "zone":
+            zone_type = parse_zone_type(line_number, value)
+        elif key == "max_drones":
+            try:
+                max_drones = int(value)
+            except ValueError:
+                raise ValueError(
+                    f"line {line_number}: "
+                    "max_drones must be a positive integer"
+                ) from None
 
-    return color, zone_type
+            if max_drones < 1:
+                raise ValueError(
+                    f"line {line_number}: "
+                    "max_drones must be greater than zero"
+                )
+        else:
+            raise ValueError(
+                f"line {line_number}: unsupported hub metadata key: {key}"
+            )
+
+    return color, zone_type, max_drones
