@@ -1,6 +1,10 @@
 from zone import Zone
 from connection import Connection
 from parser_lines import is_connection_line
+from parser_metadata import (
+    parse_metadata_body,
+    parse_metadata_pair,
+)
 
 
 def parse_connection_body(
@@ -22,6 +26,53 @@ def parse_connection_body(
         )
 
     return body
+
+
+def parse_connection_fields(
+    line_number: int,
+    body: str
+) -> tuple[str, str]:
+    parts = body.split(maxsplit=1)
+
+    connection_text = parts[0]
+
+    if len(parts) == 2:
+        metadata = parts[1]
+    else:
+        metadata = ""
+
+    return connection_text, metadata
+
+
+def parse_connection_capacity(
+    line_number: int,
+    metadata: str
+) -> int:
+    metadata_body = parse_metadata_body(line_number, metadata)
+
+    if not metadata_body:
+        return 1
+
+    key, value = parse_metadata_pair(line_number, metadata_body)
+
+    if key != "max_link_capacity":
+        raise ValueError(
+            f"line {line_number}: unsupported connection metadata key {key}"
+        )
+
+    try:
+        max_link_capacity = int(value)
+    except ValueError:
+        raise ValueError(
+            f"line {line_number}: must be a positive integer"
+        ) from None
+
+    if max_link_capacity < 1:
+        raise ValueError(
+            f"line {line_number}: capacity must be greater than zero"
+        )
+
+    return max_link_capacity
 
 
 def parse_connection_names(
@@ -52,7 +103,12 @@ def parse_connection_from_line(
     zones: dict[str, Zone]
 ) -> Connection:
     body = parse_connection_body(line_number, line)
-    zone_a_name, zone_b_name = parse_connection_names(line_number, body)
+    connection_text, metadata = parse_connection_fields(line_number, body)
+    capacity = parse_connection_capacity(line_number, metadata)
+    zone_a_name, zone_b_name = parse_connection_names(
+        line_number,
+        connection_text
+    )
     if zone_a_name not in zones:
         raise ValueError(
             f"line {line_number}: unknown zone in connection: {zone_a_name}"
@@ -67,7 +123,11 @@ def parse_connection_from_line(
         )
     zone_a = zones[zone_a_name]
     zone_b = zones[zone_b_name]
-    return Connection(zone_a, zone_b)
+    return Connection(
+        zone_a,
+        zone_b,
+        max_link_capacity=capacity,
+    )
 
 
 def parse_connections(

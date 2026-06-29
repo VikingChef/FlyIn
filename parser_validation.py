@@ -6,6 +6,7 @@ from parser_lines import (
 from parser_connections import (
     parse_connection_body,
     parse_connection_names,
+    parse_connection_fields
 )
 from parser_hubs import parse_zone_from_hub_line
 
@@ -39,9 +40,13 @@ def validate_connection_order(
 
         if is_connection_line(line):
             body = parse_connection_body(line_number, line)
-            zone_a_name, zone_b_name = parse_connection_names(
+            connection_text, _metadata = parse_connection_fields(
                 line_number,
                 body
+            )
+            zone_a_name, zone_b_name = parse_connection_names(
+                line_number,
+                connection_text
             )
             if zone_a_name not in seen_zone_names:
                 raise ValueError(
