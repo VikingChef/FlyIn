@@ -51,6 +51,10 @@ class Simulation:
         for move in moves:
             self.apply_move(move)
 
+    def complete_turn(self, accepted_moves: list[ProposedMove]) -> None:
+        self.apply_moves(accepted_moves)
+        self.turn += 1
+
     def all_drones_arrived(self) -> bool:
         for drone in self.drones:
             if not drone.has_arrived():
