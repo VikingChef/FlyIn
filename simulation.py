@@ -50,6 +50,19 @@ class Simulation:
             return True
         return False
 
+    def count_connection_moves(
+        self,
+        moves: list[ProposedMove],
+        connection: Connection,
+    ) -> int:
+        count = 0
+
+        for move in moves:
+            if move.connection == connection:
+                count += 1
+
+        return count
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
