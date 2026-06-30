@@ -63,6 +63,18 @@ class Simulation:
 
         return count
 
+    def is_connection_over_capacity(
+        self,
+        moves: list[ProposedMove],
+        connection: Connection,
+    ) -> bool:
+        if (
+            self.count_connection_moves(moves, connection)
+            > connection.max_link_capacity
+        ):
+            return True
+        return False
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
