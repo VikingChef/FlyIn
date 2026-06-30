@@ -4,7 +4,7 @@ from drone import Drone
 from map import Map
 from connection import Connection
 from move import ProposedMove
-from zone import ZoneType
+from zone import ZoneType, Zone
 
 
 @dataclass
@@ -74,6 +74,19 @@ class Simulation:
         ):
             return True
         return False
+
+    def count_zone_arrivals(
+        self,
+        moves: list[ProposedMove],
+        zone: Zone,
+    ) -> int:
+        count = 0
+
+        for move in moves:
+            if move.to_zone == zone:
+                count += 1
+
+        return count
 
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
