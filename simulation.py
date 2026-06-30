@@ -55,6 +55,11 @@ class Simulation:
         self.apply_moves(accepted_moves)
         self.turn += 1
 
+    def has_movement(self, accepted_moves: list[ProposedMove]) -> bool:
+        if accepted_moves:
+            return True
+        return False
+
     def all_drones_arrived(self) -> bool:
         for drone in self.drones:
             if not drone.has_arrived():
