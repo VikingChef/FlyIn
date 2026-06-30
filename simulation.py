@@ -97,6 +97,19 @@ class Simulation:
             return True
         return False
 
+    def is_over_capacity_move(
+        self,
+        moves: list[ProposedMove],
+        move: ProposedMove,
+    ) -> bool:
+        if self.is_connection_over_capacity(moves, move.connection):
+            return True
+
+        if self.is_zone_over_capacity(moves, move.to_zone):
+            return True
+
+        return False
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
