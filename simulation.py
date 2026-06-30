@@ -4,6 +4,7 @@ from drone import Drone
 from map import Map
 from connection import Connection
 from move import ProposedMove
+from zone import ZoneType
 
 
 @dataclass
@@ -43,6 +44,11 @@ class Simulation:
             to_zone,
             connection
         )
+
+    def is_blocked_move(self, move: ProposedMove) -> bool:
+        if move.to_zone.zone_type == ZoneType.BLOCKED:
+            return True
+        return False
 
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
