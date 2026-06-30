@@ -88,6 +88,15 @@ class Simulation:
 
         return count
 
+    def is_zone_over_capacity(
+        self,
+        moves: list[ProposedMove],
+        zone: Zone,
+    ) -> bool:
+        if self.count_zone_arrivals(moves, zone) > zone.max_drones:
+            return True
+        return False
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
