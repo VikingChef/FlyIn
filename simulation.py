@@ -65,3 +65,11 @@ class Simulation:
             if not drone.has_arrived():
                 return False
         return True
+
+    def has_failed_turn(self, accepted_moves: list[ProposedMove]) -> bool:
+        if (
+            not self.has_movement(accepted_moves)
+            and not self.all_drones_arrived()
+        ):
+            return True
+        return False
