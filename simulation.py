@@ -133,6 +133,21 @@ class Simulation:
 
         return False
 
+    def get_uncontested_moves(
+        self,
+        moves: list[ProposedMove],
+    ) -> list[ProposedMove]:
+        uncontested_moves = []
+
+        for move in moves:
+            if (
+                not self.is_rule_rejected_move(moves, move)
+                and not self.is_contested_move(moves, move)
+            ):
+                uncontested_moves.append(move)
+
+        return uncontested_moves
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
