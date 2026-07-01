@@ -203,7 +203,10 @@ class Simulation:
         contested_moves = []
 
         for move in moves:
-            if self.is_contested_move(moves, move):
+            if (
+                not self.is_rule_rejected_move(move)
+                and self.is_contested_move(moves, move)
+            ):
                 contested_moves.append(move)
 
         return contested_moves
