@@ -117,6 +117,25 @@ class Simulation:
             zone,
         )
 
+    def can_accept_contested_move(
+        self,
+        accepted_moves: list[ProposedMove],
+        move: ProposedMove,
+    ) -> bool:
+        if self.get_remaining_connection_capacity(
+            accepted_moves,
+            move.connection,
+        ) <= 0:
+            return False
+
+        if self.get_remaining_zone_capacity(
+            accepted_moves,
+            move.to_zone,
+        ) <= 0:
+            return False
+
+        return True
+
     def is_over_capacity_move(
         self,
         moves: list[ProposedMove],
