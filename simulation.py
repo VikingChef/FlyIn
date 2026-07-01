@@ -112,13 +112,9 @@ class Simulation:
 
     def is_rule_rejected_move(
         self,
-        moves: list[ProposedMove],
         move: ProposedMove,
     ) -> bool:
         if self.is_blocked_move(move):
-            return True
-
-        if self.is_over_capacity_move(moves, move):
             return True
 
         return False
@@ -141,7 +137,7 @@ class Simulation:
 
         for move in moves:
             if (
-                not self.is_rule_rejected_move(moves, move)
+                not self.is_rule_rejected_move(move)
                 and not self.is_contested_move(moves, move)
             ):
                 uncontested_moves.append(move)
