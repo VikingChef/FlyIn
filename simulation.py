@@ -110,6 +110,19 @@ class Simulation:
 
         return False
 
+    def is_rule_rejected_move(
+        self,
+        moves: list[ProposedMove],
+        move: ProposedMove,
+    ) -> bool:
+        if self.is_blocked_move(move):
+            return True
+
+        if self.is_over_capacity_move(moves, move):
+            return True
+
+        return False
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
