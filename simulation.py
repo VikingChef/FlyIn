@@ -168,6 +168,12 @@ class Simulation:
 
         return rejected_moves
 
+    def get_initial_accepted_moves(
+        self,
+        moves: list[ProposedMove],
+    ) -> list[ProposedMove]:
+        return self.get_uncontested_moves(moves)
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
