@@ -107,6 +107,16 @@ class Simulation:
             return True
         return False
 
+    def get_remaining_zone_capacity(
+        self,
+        accepted_moves: list[ProposedMove],
+        zone: Zone,
+    ) -> int:
+        return zone.max_drones - self.count_zone_arrivals(
+            accepted_moves,
+            zone,
+        )
+
     def is_over_capacity_move(
         self,
         moves: list[ProposedMove],
