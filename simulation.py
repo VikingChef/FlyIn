@@ -75,6 +75,16 @@ class Simulation:
             return True
         return False
 
+    def get_remaining_connection_capacity(
+        self,
+        accepted_moves: list[ProposedMove],
+        connection: Connection,
+    ) -> int:
+        return connection.max_link_capacity - self.count_connection_moves(
+            accepted_moves,
+            connection,
+        )
+
     def count_zone_arrivals(
         self,
         moves: list[ProposedMove],
