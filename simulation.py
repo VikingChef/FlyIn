@@ -148,6 +148,18 @@ class Simulation:
 
         return uncontested_moves
 
+    def get_contested_moves(
+        self,
+        moves: list[ProposedMove],
+    ) -> list[ProposedMove]:
+        contested_moves = []
+
+        for move in moves:
+            if self.is_contested_move(moves, move):
+                contested_moves.append(move)
+
+        return contested_moves
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
