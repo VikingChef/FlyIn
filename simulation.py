@@ -161,6 +161,16 @@ class Simulation:
             contested_moves,
         )
 
+    def resolve_turn(
+        self,
+        moves: list[ProposedMove],
+    ) -> list[ProposedMove]:
+        accepted_moves = self.resolve_accepted_moves(moves)
+
+        self.complete_turn(accepted_moves)
+
+        return accepted_moves
+
     def is_over_capacity_move(
         self,
         moves: list[ProposedMove],
