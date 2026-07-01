@@ -136,6 +136,19 @@ class Simulation:
 
         return True
 
+    def accept_contested_moves(
+        self,
+        accepted_moves: list[ProposedMove],
+        contested_moves: list[ProposedMove],
+    ) -> list[ProposedMove]:
+        resolved_moves = list(accepted_moves)
+
+        for move in contested_moves:
+            if self.can_accept_contested_move(resolved_moves, move):
+                resolved_moves.append(move)
+
+        return resolved_moves
+
     def is_over_capacity_move(
         self,
         moves: list[ProposedMove],
