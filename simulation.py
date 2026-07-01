@@ -156,6 +156,18 @@ class Simulation:
 
         return contested_moves
 
+    def get_rule_rejected_moves(
+        self,
+        moves: list[ProposedMove],
+    ) -> list[ProposedMove]:
+        rejected_moves = []
+
+        for move in moves:
+            if self.is_rule_rejected_move(move):
+                rejected_moves.append(move)
+
+        return rejected_moves
+
     def apply_move(self, move: ProposedMove) -> None:
         move.drone.current_zone = move.to_zone
 
