@@ -86,6 +86,12 @@ class Simulation:
             return True
         return False
 
+    def get_zone_movement_cost(self, zone: Zone) -> int:
+        if zone.zone_type == ZoneType.RESTRICTED:
+            return 2
+
+        return 1
+
     def get_non_blocked_candidate_moves(
         self,
         drone: Drone,
