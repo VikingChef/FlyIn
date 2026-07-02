@@ -86,6 +86,18 @@ class Simulation:
             return True
         return False
 
+    def get_non_blocked_candidate_moves(
+        self,
+        drone: Drone,
+    ) -> list[ProposedMove]:
+        allowed_moves = []
+
+        for move in self.get_drone_candidate_moves(drone):
+            if not self.is_blocked_move(move):
+                allowed_moves.append(move)
+
+        return allowed_moves
+
     def count_connection_moves(
         self,
         moves: list[ProposedMove],
