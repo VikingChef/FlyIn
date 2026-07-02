@@ -70,6 +70,17 @@ class Simulation:
 
         return None
 
+    def get_proposed_moves(self) -> list[ProposedMove]:
+        proposed_moves = []
+
+        for drone in self.drones:
+            move = self.choose_drone_move(drone)
+
+            if move is not None:
+                proposed_moves.append(move)
+
+        return proposed_moves
+
     def is_blocked_move(self, move: ProposedMove) -> bool:
         if move.to_zone.zone_type == ZoneType.BLOCKED:
             return True
