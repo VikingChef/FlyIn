@@ -45,6 +45,19 @@ class Simulation:
             connection
         )
 
+    def get_drone_candidate_moves(
+        self,
+        drone: Drone,
+    ) -> list[ProposedMove]:
+        candidate_moves = []
+
+        for connection in self.map.get_connections(drone.current_zone):
+            candidate_moves.append(
+                self.create_proposed_move(drone, connection)
+            )
+
+        return candidate_moves
+
     def is_blocked_move(self, move: ProposedMove) -> bool:
         if move.to_zone.zone_type == ZoneType.BLOCKED:
             return True
