@@ -62,7 +62,7 @@ class Simulation:
         self,
         drone: Drone,
     ) -> ProposedMove | None:
-        candidate_moves = self.get_drone_candidate_moves(drone)
+        candidate_moves = self.get_non_blocked_candidate_moves(drone)
 
         for move in candidate_moves:
             if move.to_zone == drone.destination:
