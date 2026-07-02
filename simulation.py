@@ -207,6 +207,11 @@ class Simulation:
 
         return accepted_moves
 
+    def run_turn(self) -> list[ProposedMove]:
+        proposed_moves = self.get_proposed_moves()
+
+        return self.resolve_turn(proposed_moves)
+
     def is_over_capacity_move(
         self,
         moves: list[ProposedMove],
