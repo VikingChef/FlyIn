@@ -58,6 +58,18 @@ class Simulation:
 
         return candidate_moves
 
+    def choose_drone_move(
+        self,
+        drone: Drone,
+    ) -> ProposedMove | None:
+        candidate_moves = self.get_drone_candidate_moves(drone)
+
+        for move in candidate_moves:
+            if move.to_zone == drone.destination:
+                return move
+
+        return None
+
     def is_blocked_move(self, move: ProposedMove) -> bool:
         if move.to_zone.zone_type == ZoneType.BLOCKED:
             return True
